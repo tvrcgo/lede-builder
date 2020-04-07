@@ -1,0 +1,12 @@
+
+version: '2'
+services:
+  lede-build:
+    build:
+      context: .
+    image: lede-builder
+    container_name: lede-builder
+    environment:
+      DEBIAN_FRONTEND: noninteractive
+    volumes:
+      - ${LEDE_HOME}:/lede
