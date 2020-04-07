@@ -4,7 +4,7 @@ FROM ubuntu:18.04
 WORKDIR /lede
 
 RUN apt-get update && \
-  apt-get -y install sudo && \
+  apt-get -y install sudo wget && \
   # tzdata noninteractive
   apt-get -y install tzdata && \
   ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
