@@ -15,4 +15,7 @@ RUN apt-get update && \
 
 COPY entrypoint.sh /entrypoint.sh
 
+RUN groupadd -r ledegrp && useradd -r -g ledegrp lede
+USER lede
+
 CMD [ "/entrypoint.sh" ]
