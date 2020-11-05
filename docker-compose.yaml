@@ -8,5 +8,4 @@ services:
     container_name: lede-builder
     environment:
       DEBIAN_FRONTEND: noninteractive
-    volumes:
-      - ${LEDE_HOME}:/lede
+      CONFIG_FILE: /lede/config/N1.config

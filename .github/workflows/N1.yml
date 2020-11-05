@@ -1,0 +1,58 @@
+
+name: build N1
+
+on:
+  push:
+    paths:
+      - config/N1.config
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede.git
+  REPO_BRANCH: master
+  CONFIG_FILE: config/N1.config
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Clone source code
+        run: |
+          git clone --depth 1 $REPO_URL -b $REPO_BRANCH src
+          ln -sf /openwrt $GITHUB_WORKSPACE/src
+
+      - name: Install feeds
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          cd src
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Load custom configuration
+        run: |
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE src/.config
+
+      - name: Download packages
+        run: |
+          cd src
+          make defconfig
+          make download -j8
+
+      - name: Compile
+        id: compile
+        run: |
+          cd src
+          make -j$(($(nproc) + 1)) V=s
+          echo "::set-output name=status::success"
+
+      - name: Upload bin directory
+        uses: actions/upload-artifact@main
+        if: steps.compile.outputs.status == 'success'
+        with:
+          name: Openwrt_bin_N1
+          path: src/bin
