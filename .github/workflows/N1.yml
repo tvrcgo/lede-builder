@@ -5,11 +5,13 @@ on:
   release:
     types: published
   push:
+    branches:
+      - master
+      - main
     tags:
       - v*
     paths:
       - 'config/N1.config'
-      - '**/N1.yml'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
