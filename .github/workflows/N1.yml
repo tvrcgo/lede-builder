@@ -52,11 +52,12 @@ jobs:
           cd bin/targets/*/*
           rm -rf packages
           echo "::set-env name=FIRMWARE::$PWD"
+          echo "::set-env name=BUILD_TIME::_$(date +"%Y%m%d%H%M")"
           echo "::set-output name=status::success"
 
       - name: Upload firmware directory
         uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
-          name: Openwrt_firmware_${DEVICE_NAME}_$(date +"%s")
+          name: Openwrt_firmware_${DEVICE_NAME}_${{ env.BUILD_TIME }}
           path: ${{ env.FIRMWARE }}
