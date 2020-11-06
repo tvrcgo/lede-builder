@@ -20,5 +20,5 @@ cd /lede-builder
 docker-compose up
 ```
 
-固件编译完成后输出到 `$LEDE_HOME/bin/targets`
+固件编译完成后输出到 `~/Downloads/openwrt-firmware`
 
