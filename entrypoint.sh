@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # clone lede source
-git clone --depth 1 https://github.com/coolsnowwolf/lede.git -b master src
+git clone --depth 1 $REPO_URL -b $REPO_BRANCH src
 cd src
 
 # update feeds

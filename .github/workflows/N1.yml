@@ -2,9 +2,14 @@
 name: build N1
 
 on:
-  push:
+  pull_request:
     branches:
       - master
+  push:
+    tags:
+      - v*
+    paths:
+      - config/N1.config
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
@@ -21,41 +26,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Clone source code
-        run: |
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH src
-          ln -sf /openwrt $GITHUB_WORKSPACE/src
-
-      - name: Install feeds
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          cd src
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
-
-      - name: Load custom configuration
-        run: |
-          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE src/.config
-
-      - name: Download packages
-        run: |
-          cd src
-          make defconfig
-          make download -j8
-
       - name: Compile
         id: compile
         run: |
-          cd src
-          make -j$(($(nproc) + 1)) V=s
+          sh ./entrypoint.sh
           cd bin/targets/*/*
           rm -rf packages
           echo "::set-env name=FIRMWARE::$PWD"
-          echo "::set-env name=BUILD_TIME::_$(date +"%Y%m%d%H%M")"
+          echo "::set-env name=BUILD_TIME::$(date +"%Y%m%d%H%M")"
           echo "::set-output name=status::success"
 
-      - name: Upload firmware directory
+      - name: Upload firmware
         uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
