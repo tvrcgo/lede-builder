@@ -9,7 +9,7 @@ on:
       - v*
     paths:
       - 'config/N1.config'
-      - '.github/workflows/N1.yml'
+      - '**/N1.yml'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
