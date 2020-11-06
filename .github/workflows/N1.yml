@@ -9,6 +9,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
   REPO_BRANCH: master
+  DEVICE_NAME: N1
   CONFIG_FILE: config/N1.config
 
 jobs:
@@ -48,11 +49,14 @@ jobs:
         run: |
           cd src
           make -j$(($(nproc) + 1)) V=s
+          cd bin/targets/*/*
+          rm -rf packages
+          echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-output name=status::success"
 
-      - name: Upload bin directory
+      - name: Upload firmware directory
         uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
-          name: Openwrt_bin_N1
-          path: src/bin
+          name: Openwrt_firmware_${DEVICE_NAME}_$(date +"%s")
+          path: ${{ env.FIRMWARE }}
