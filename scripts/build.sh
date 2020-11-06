@@ -18,4 +18,4 @@ make defconfig
 make -j8 download
 
 # compile
-make -j$(($(nproc) + 1)) V=s
+make -j$(nproc) || make -j1 || make -j1 V=s
