@@ -2,6 +2,8 @@
 
 基于 docker 编译 lede 路由器固件
 
+![build N1](https://github.com/tvrcgo/lede-builder/workflows/build%20N1/badge.svg?branch=master)
+
 ## 本地编译
 
 首次编译 docker 镜像并运行容器编译固件
