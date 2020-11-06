@@ -29,7 +29,7 @@ jobs:
       - name: Compile
         id: compile
         run: |
-          sh ./entrypoint.sh
+          sh scripts/build.sh
           cd bin/targets/*/*
           rm -rf packages
           echo "::set-env name=FIRMWARE::$PWD"
@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
-          name: Openwrt_firmware_${DEVICE_NAME}_${{ env.BUILD_TIME }}
+          name: Openwrt_firmware_${{ env.DEVICE_NAME }}_${{ env.BUILD_TIME }}
           path: ${{ env.FIRMWARE }}

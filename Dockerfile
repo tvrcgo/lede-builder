@@ -15,6 +15,7 @@ RUN apt-get update && \
   sudo apt-get -y autoremove --purge
 
 COPY config/* /lede/config/
+COPY scripts/* /lede/scripts/
 COPY entrypoint.sh /entrypoint.sh
 
 RUN groupadd -r ledegrp && useradd -r -g ledegrp lede
