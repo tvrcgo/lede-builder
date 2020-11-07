@@ -30,7 +30,7 @@ jobs:
         id: compile
         run: |
           sh scripts/build.sh
-          cd bin/targets/
+          cd src/bin/targets/*/*/
           rm -rf packages
           echo "::set-env name=FIRMWARE::$PWD"
           echo "::set-env name=BUILD_TIME::$(date +"%Y%m%d%H%M")"
