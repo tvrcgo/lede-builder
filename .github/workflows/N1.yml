@@ -36,9 +36,19 @@ jobs:
           echo "::set-env name=BUILD_TIME::$(date +"%Y%m%d%H%M")"
           echo "::set-output name=status::success"
 
-      - name: Upload firmware
+      - name: Upload firmware artifact
         uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
           name: Openwrt_firmware_${{ env.DEVICE_NAME }}_${{ env.BUILD_TIME }}
           path: ${{ env.FIRMWARE }}
+
+      - name: Upload firmware to OSS
+        uses: tvrcgo/upload-to-oss@v0.1.1
+        with:
+          key-id: ${{ secrets.OSS_KEY_ID }}
+          key-secret: ${{ secrets.OSS_KEY_SECRET }}
+          region: oss-cn-shenzhen
+          bucket: tvrcgo
+          asset-path: src/bin/targets/armvirt/64/
+          target-path: /openwrt-firmware/${{ env.DEVICE_NAME }}-${{ env.BUILD_TIME }}
