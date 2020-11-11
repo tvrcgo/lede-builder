@@ -44,8 +44,21 @@ jobs:
           name: Openwrt_firmware_${{ env.DEVICE_NAME }}_${{ env.BUILD_TIME }}
           path: ${{ env.FIRMWARE }}
 
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prerelease: true
+          draft: true
+          files: |
+            ${{ env.FIRMWARE }}/*.img
+            ${{ env.FIRMWARE }}/*.gz
+
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@v0.1.1
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
           key-id: ${{ secrets.OSS_KEY_ID }}
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
