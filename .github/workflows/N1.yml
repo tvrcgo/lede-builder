@@ -35,6 +35,7 @@ jobs:
           rm -rf packages
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "BUILD_TIME=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          [[ $GITHUB_REF =~ ^refs\/tags/v[0-9]+(\.[0-9]+){1,2} ]] && echo "IS_VERSION_TAG=1" >> $GITHUB_ENV
           echo "::set-output name=status::success"
 
       - name: Upload artifact
@@ -58,7 +59,7 @@ jobs:
 
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@v0.1.1
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: env.IS_VERSION_TAG == 1
         with:
           key-id: ${{ secrets.OSS_KEY_ID }}
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
