@@ -50,5 +50,5 @@ jobs:
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-shenzhen
           bucket: tvrcgo
-          asset-path: src/bin/targets/armvirt/64/
+          asset-path: ${{ env.FIRMWARE }}
           target-path: /openwrt-firmware/${{ env.DEVICE_NAME }}-${{ env.BUILD_TIME }}
