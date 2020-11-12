@@ -1,5 +1,5 @@
 
-name: build N1
+name: Build firmware
 
 on:
   push:
@@ -10,27 +10,36 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git
   REPO_BRANCH: master
-  DEVICE_NAME: N1
-  CONFIG_FILE: $GITHUB_WORKSPACE/config/N1.config
 
 jobs:
   build:
     runs-on: ubuntu-18.04
     if: github.event.repository.owner.id == github.event.sender.id
 
+    name: Build ${{ matrix.target }}
+    stragegy:
+      fail-fast: false
+      matrix:
+        target: [N1]
+
     steps:
       - name: Checkout
         uses: actions/checkout@main
+
+      - name: Prepare
+        run: |
+          echo "DEVICE_NAME=${{ matrix.target }}" >> $GITHUB_ENV
+          echo "CONFIG_FILE=$GITHUB_WORKSPACE/config/${{ matrix.target }}.config" >> $GITHUB_ENV
+          [[ $GITHUB_REF =~ ^refs\/tags/v[0-9]+(\.[0-9]+){1,2} ]] && echo "IS_VERSION_TAG=1" >> $GITHUB_ENV
 
       - name: Compile
         id: compile
         run: |
           sh scripts/build.sh
-          cd src/bin/targets/*/*/
-          rm -rf packages
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "BUILD_TIME=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-          [[ $GITHUB_REF =~ ^refs\/tags/v[0-9]+(\.[0-9]+){1,2} ]] && echo "IS_VERSION_TAG=1" >> $GITHUB_ENV
+          echo "FIRMWARE=/openwrt/firmware" >> $GITHUB_ENV
+          find src/bin/targets -name "*sysupgrade*bin*" | xargs -i mv -f {} $FIRMWARE
+          find src/bin/targets -name "*combined*img*" | xargs -i mv -f {} $FIRMWARE
           echo "::set-output name=status::success"
 
       - name: Upload artifact
