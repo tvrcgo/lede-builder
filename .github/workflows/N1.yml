@@ -2,15 +2,10 @@
 name: build N1
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     tags:
       - v*
       - master-*
-    paths:
-      - config/N1.config
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede.git

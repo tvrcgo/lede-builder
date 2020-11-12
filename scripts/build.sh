@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# clone lede source
+# clone openwrt source
 git clone --depth 1 $REPO_URL -b $REPO_BRANCH src
 cd src
 

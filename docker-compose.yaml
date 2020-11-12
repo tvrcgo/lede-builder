@@ -1,15 +1,15 @@
 
 version: '2'
 services:
-  lede-build:
+  openwrt-build:
     build:
       context: .
-    image: lede-builder
-    container_name: lede-builder
+    image: openwrt-builder
+    container_name: openwrt-builder
     environment:
       DEBIAN_FRONTEND: noninteractive
-      CONFIG_FILE: /lede/config/N1.config
+      CONFIG_FILE: /openwrt/config/N1.config
       REPO_URL: https://github.com/coolsnowwolf/lede.git
       REPO_BRANCH: master
     volumes:
-      - ~/Downloads/openwrt-firmware:/lede/firmware
+      - ~/Downloads/openwrt-firmware:/openwrt/firmware
