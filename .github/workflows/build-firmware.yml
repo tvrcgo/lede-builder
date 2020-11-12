@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "DEVICE_NAME=${{ matrix.target }}" >> $GITHUB_ENV
           echo "CONFIG_FILE=$GITHUB_WORKSPACE/config/${{ matrix.target }}.config" >> $GITHUB_ENV
-          echo "FIRMWARE=/openwrt/firmware" >> $GITHUB_ENV
+          echo "FIRMWARE_DIR=/openwrt/firmware" >> $GITHUB_ENV
           if [[ $GITHUB_REF =~ ^refs\/tags/v[0-9]+(\.[0-9]+){1,2} ]]; then
             echo "IS_VERSION_TAG=1" >> $GITHUB_ENV
           fi
@@ -40,17 +40,17 @@ jobs:
         run: |
           sh scripts/build.sh
           find src/bin/targets/**/packages | xargs rm -rf
-          find src/bin/targets -name "*sysupgrade*bin*" | xargs -i mv -f {} $FIRMWARE
-          find src/bin/targets -name "*combined*img*" | xargs -i mv -f {} $FIRMWARE
-          echo "BUILD_TIME=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          find src/bin/targets -name "*sysupgrade*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
+          find src/bin/targets -name "*combined*img*" | xargs -i mv -f {} $FIRMWARE_DIR
+          echo "FIRMWARE_TAG=${{ env.DEVICE_NAME }}_${GITHUB_REF##*/}_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           echo "::set-output name=status::success"
 
       - name: Upload artifact
         uses: actions/upload-artifact@main
         if: steps.compile.outputs.status == 'success'
         with:
-          name: Openwrt_firmware_${{ env.DEVICE_NAME }}_${{ env.BUILD_TIME }}
-          path: ${{ env.FIRMWARE }}
+          name: Openwrt_${FIRMWARE_TAG}
+          path: ${{ env.FIRMWARE_DIR }}
 
       - name: Create release
         uses: softprops/action-gh-release@v1
@@ -61,10 +61,10 @@ jobs:
           prerelease: true
           draft: true
           files: |
-            ${{ env.FIRMWARE }}/*.bin
-            ${{ env.FIRMWARE }}/*.img
-            ${{ env.FIRMWARE }}/*.gz
-            ${{ env.FIRMWARE }}/*.zip
+            ${{ env.FIRMWARE_DIR }}/*.bin
+            ${{ env.FIRMWARE_DIR }}/*.img
+            ${{ env.FIRMWARE_DIR }}/*.gz
+            ${{ env.FIRMWARE_DIR }}/*.zip
 
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@v0.1.1
@@ -74,5 +74,5 @@ jobs:
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-shenzhen
           bucket: tvrcgo
-          asset-path: ${{ env.FIRMWARE }}
-          target-path: /openwrt-firmware/${{ env.DEVICE_NAME }}-${{ env.BUILD_TIME }}
+          asset-path: ${{ env.FIRMWARE_DIR }}
+          target-path: /openwrt-firmware/${FIRMWARE_TAG}
