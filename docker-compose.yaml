@@ -8,7 +8,7 @@ services:
     container_name: openwrt-builder
     environment:
       DEBIAN_FRONTEND: noninteractive
-      DEVICE_NAME: N1
+      TARGET: N1
       REPO_URL: https://github.com/coolsnowwolf/lede.git
       REPO_BRANCH: master
     volumes:
