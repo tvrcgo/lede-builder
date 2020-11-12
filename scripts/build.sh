@@ -16,6 +16,7 @@ make defconfig
 
 # make download
 make -j8 download
+find dl -size -1024c -exec rm -f {} \;
 
 # compile
 make -j$(nproc) || make -j1 || make -j1 V=s
