@@ -40,8 +40,8 @@ jobs:
         run: |
           sh scripts/build.sh
           find src/bin/targets/**/packages | xargs rm -rf
-          find src/bin/targets -name "*sysupgrade*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
-          find src/bin/targets -name "*combined*img*" | xargs -i mv -f {} $FIRMWARE_DIR
+          find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
+          find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
           echo "::set-output name=status::success"
 
       - name: Upload artifact
