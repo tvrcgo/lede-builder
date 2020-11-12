@@ -2,7 +2,7 @@
 
 基于 docker 编译 openwrt 路由器固件
 
-![build N1](https://github.com/tvrcgo/openwrt-builder/workflows/build%20N1/badge.svg?branch=master)
+![Build firmware](https://github.com/tvrcgo/openwrt-builder/workflows/Build%20firmware/badge.svg?branch=master)
 
 ## 本地编译
 
