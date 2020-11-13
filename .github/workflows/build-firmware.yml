@@ -53,11 +53,9 @@ jobs:
 
       - name: Upload firmware to CowTransfer
         id: cowtransfer
-        run: |
-          curl -fsSL git.io/file-transfer | sh
-          ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE_DIR} 2>&1 | tee cowtransfer.log
-          echo "::debug::CowTransfer > $(cat cowtransfer.log | grep https)"
-          echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+        uses: tvrcgo/cowtransfer-action@master
+        with:
+          files: ${{ env.FIRMWARE_DIR }}
 
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@v0.1.1
