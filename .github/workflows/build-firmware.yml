@@ -40,7 +40,6 @@ jobs:
         id: compile
         run: |
           sh scripts/build.sh
-          find src/bin/targets -name "packages" | xargs rm -rf
           find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
           find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
           echo "::set-output name=status::success"
@@ -80,8 +79,5 @@ jobs:
           prerelease: true
           draft: true
           files: |
-            ${{ env.FIRMWARE_DIR }}/*.bin
-            ${{ env.FIRMWARE_DIR }}/*.img
-            ${{ env.FIRMWARE_DIR }}/*.gz
-            ${{ env.FIRMWARE_DIR }}/*.zip
+            ${{ env.FIRMWARE_DIR }}/*
 
