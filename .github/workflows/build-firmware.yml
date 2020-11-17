@@ -104,7 +104,7 @@ jobs:
             </dl>
             <style>
               dt { margin: 0.5em 0; font-size: 1.1em; font-weight: bold; width: 120px; float: left; clear: both; }
-              dd { margin: 0.3em 0 0.3em 120px; }
+              dd { margin: 0.5em 0 0.5em 120px; min-height: 30px; }
             </style>
           to: tvrcgo@163.com
           from: GitHub
