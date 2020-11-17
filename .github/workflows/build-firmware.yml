@@ -89,13 +89,13 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "[Github Actions] build-firmware/${{ matrix.target }} result"
+          subject: "[${{ job.status }}] build-firmware/${{ matrix.target }}"
           body: |
             <h1>build-firmware/${{ matrix.target }}</h1>
             <dl>
               <dt>编译结果</dt>
               <dd>${{ steps.compile.outputs.status }}</dd>
-              <dt>固件下载地址</dt>
+              <dt>固件下载</dt>
               <dd><a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></dd>
               <dt>GitHub</dt>
               <dd>Ref：${{ github.ref }}</dd>
@@ -104,9 +104,9 @@ jobs:
             </dl>
             <style>
               dt { margin: 0.5em 0; font-size: 1.1em; font-weight: bold; }
-              dd { margin: 0.2em 0; }
+              dd { margin: 0.3em 0 0.3em 2em; }
             </style>
           to: tvrcgo@163.com
-          from: GitHub
+          from: GitHub Action
           content_type: text/html
 
