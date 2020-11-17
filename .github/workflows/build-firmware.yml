@@ -3,6 +3,8 @@ name: Build firmware
 
 on:
   push:
+    branches:
+      - feature/*
     tags:
       - v*
       - master-*
@@ -38,6 +40,7 @@ jobs:
 
       - name: Compile
         id: compile
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           sh scripts/build.sh
           find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
@@ -54,12 +57,13 @@ jobs:
       - name: Upload firmware to CowTransfer
         id: cowtransfer
         uses: tvrcgo/cowtransfer-action@master
+        if: steps.compile.outputs.status == 'success'
         with:
           files: ${{ env.FIRMWARE_DIR }}
 
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@master
-        if: startsWith(github.ref, 'refs/tags/')
+        if: steps.compile.outputs.status == 'success'
         with:
           key-id: ${{ secrets.OSS_KEY_ID }}
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
@@ -70,7 +74,7 @@ jobs:
 
       - name: Create release
         uses: softprops/action-gh-release@v1
-        if: env.IS_VERSION_TAG == 1
+        if: steps.compile.outputs.status == 'success' && env.IS_VERSION_TAG == 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
