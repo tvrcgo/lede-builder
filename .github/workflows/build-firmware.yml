@@ -44,24 +44,8 @@ jobs:
           # sh scripts/build.sh
           # find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
           # find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
+          echo "hahaha" | tee firmware/haha.log
           echo "::set-output name=status::success"
-
-      - name: Send mail
-        uses: dawidd6/action-send-mail@v2
-        with:
-          server_address: smtp.exmail.qq.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: Github Actions build-firmware result
-          body: |
-            <h1>Github Actions Notification</h1>
-            <div>编译结果：${{ steps.compile.outputs.status }}</div>
-            <div>下载地址：http://www.baidu.com</div>
-          to: tvrcgo@163.com
-          from: WeiLai
-          content_type: text/html
-          attachments: README.md
 
       # - name: Upload artifact
       #   uses: actions/upload-artifact@main
@@ -70,11 +54,11 @@ jobs:
       #     name: Openwrt_${{ env.FIRMWARE_TAG }}
       #     path: ${{ env.FIRMWARE_DIR }}
 
-      # - name: Upload firmware to CowTransfer
-      #   id: cowtransfer
-      #   uses: tvrcgo/cowtransfer-action@master
-      #   with:
-      #     files: ${{ env.FIRMWARE_DIR }}
+      - name: Upload firmware to CowTransfer
+        id: cowtransfer
+        uses: tvrcgo/cowtransfer-action@master
+        with:
+          files: ${{ env.FIRMWARE_DIR }}
 
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@master
@@ -97,4 +81,20 @@ jobs:
           draft: true
           files: |
             ${{ env.FIRMWARE_DIR }}/*
+
+      - name: Send mail notification
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: smtp.exmail.qq.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[Github Actions] build-firmware/${{ matrix.target }} result"
+          body: |
+            <h1>Github Actions Notification</h1>
+            <div>编译结果：${{ steps.compile.outputs.status }}</div>
+            <div>固件下载地址：<a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></div>
+          to: tvrcgo@163.com
+          from: WeiLai
+          content_type: text/html
 
