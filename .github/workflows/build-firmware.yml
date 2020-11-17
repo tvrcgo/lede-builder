@@ -94,13 +94,13 @@ jobs:
             <h1>build-firmware/${{ matrix.target }}</h1>
             <dl>
               <dt>编译结果</dt>
-              <dd><p>${{ steps.compile.outputs.status }}</p></dd>
+              <dd>${{ steps.compile.outputs.status }}</dd>
               <dt>固件下载地址</dt>
-              <dd><p><a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></p></dd>
+              <dd><a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></dd>
               <dt>GitHub</dt>
-              <dd><p>Ref：${{ github.ref }}</p></dd>
-              <dd><p>Job：${{ job.status }}, ${{ job.container.id }}</p></dd>
-              <dd><p>Runner：<a href='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}' target='_blank'>${{ github.run_id }}</a></p></dd>
+              <dd>Ref：${{ github.ref }}</dd>
+              <dd>Runner：<a href='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}' target='_blank'>${{ github.run_id }}</a></dd>
+              <dd>Job：job_id=${{ github.job }}, status=${{ job.status }}</dd>
             </dl>
           to: tvrcgo@163.com
           from: GitHub
