@@ -103,8 +103,8 @@ jobs:
               <dd>Job：job_id=${{ github.job }}, status=${{ job.status }}</dd>
             </dl>
             <style>
-              dt { line-height: 1.5em; font-weight: bold;}
-              dd { line-height: 1.2em; }
+              dt { margin: 0.5em 0; font-size: 1.2em; font-weight: bold; width: 120px; float: left; }
+              dd { margin: 0.3em 0 0.3em 120px; }
             </style>
           to: tvrcgo@163.com
           from: GitHub
