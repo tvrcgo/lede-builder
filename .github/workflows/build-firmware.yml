@@ -91,10 +91,12 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "[Github Actions] build-firmware/${{ matrix.target }} result"
           body: |
-            <h1>Github Actions Notification</h1>
-            <div>编译结果：${{ steps.compile.outputs.status }}</div>
-            <div>固件下载地址：<a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></div>
+            <h1>build-firmware/${{ matrix.target }}</h1>
+            <p>分支/标签：${GITHUB_REF##*/}</p>
+            <p>编译结果：${{ steps.compile.outputs.status }}</p>
+            <p>固件下载地址：<a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></p>
+            <p>GitHub 工作流：${{ github.job }}, ${{ github.run_id }}</p>
           to: tvrcgo@163.com
-          from: WeiLai
+          from: GitHub
           content_type: text/html
 
