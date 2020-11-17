@@ -3,6 +3,8 @@ name: Build firmware
 
 on:
   push:
+    branches:
+      - feature/*
     tags:
       - v*
       - master-*
@@ -39,23 +41,37 @@ jobs:
       - name: Compile
         id: compile
         run: |
-          sh scripts/build.sh
-          find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
-          find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
+          # sh scripts/build.sh
+          # find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
+          # find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
           echo "::set-output name=status::success"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@main
-        if: steps.compile.outputs.status == 'success'
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v2
         with:
-          name: Openwrt_${{ env.FIRMWARE_TAG }}
-          path: ${{ env.FIRMWARE_DIR }}
+          server_address: smtp.exmail.qq.com
+          server_port: 465
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: [Github Actions] build-firmware result
+          body: file://README.md
+          to: tvrcgo@163.com
+          from: Wei Lai
+          content_type: text/html
+          attachments: entrypoint.sh
 
-      - name: Upload firmware to CowTransfer
-        id: cowtransfer
-        uses: tvrcgo/cowtransfer-action@master
-        with:
-          files: ${{ env.FIRMWARE_DIR }}
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@main
+      #   if: steps.compile.outputs.status == 'success'
+      #   with:
+      #     name: Openwrt_${{ env.FIRMWARE_TAG }}
+      #     path: ${{ env.FIRMWARE_DIR }}
+
+      # - name: Upload firmware to CowTransfer
+      #   id: cowtransfer
+      #   uses: tvrcgo/cowtransfer-action@master
+      #   with:
+      #     files: ${{ env.FIRMWARE_DIR }}
 
       - name: Upload firmware to OSS
         uses: tvrcgo/upload-to-oss@master
