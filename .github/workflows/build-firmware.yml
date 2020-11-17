@@ -61,7 +61,7 @@ jobs:
           to: tvrcgo@163.com
           from: WeiLai
           content_type: text/html
-          attachments: $(find scripts/*.sh)
+          attachments: README.md
 
       # - name: Upload artifact
       #   uses: actions/upload-artifact@main
