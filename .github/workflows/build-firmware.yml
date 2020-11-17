@@ -93,11 +93,11 @@ jobs:
           body: |
             <h1>build-firmware/${{ matrix.target }}</h1>
             <dl>
-              <dt>编译结果</dt>
+              <dt><h4>编译结果</h4></dt>
               <dd>${{ steps.compile.outputs.status }}</dd>
-              <dt>固件下载地址</dt>
+              <dt><h4>固件下载地址</h4></dt>
               <dd><a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></dd>
-              <dt>GitHub</dt>
+              <dt><h4>GitHub</h4></dt>
               <dd>Ref：${{ github.ref }}</dd>
               <dd>Runner：<a href='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}' target='_blank'>${{ github.run_id }}</a></dd>
               <dd>Job：job_id=${{ github.job }}, status=${{ job.status }}</dd>
