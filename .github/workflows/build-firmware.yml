@@ -42,7 +42,6 @@ jobs:
           sh scripts/build.sh
           find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
           find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
-          echo "hahaha" | tee firmware/haha.log
           echo "::set-output name=status::success"
 
       - name: Upload artifact
