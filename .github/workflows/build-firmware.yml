@@ -3,8 +3,6 @@ name: Build firmware
 
 on:
   push:
-    branches:
-      - feature/*
     tags:
       - v*
       - master-*
@@ -41,18 +39,18 @@ jobs:
       - name: Compile
         id: compile
         run: |
-          # sh scripts/build.sh
-          # find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
-          # find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
+          sh scripts/build.sh
+          find src/bin/targets -name "*bin*" | xargs -i mv -f {} $FIRMWARE_DIR
+          find src/bin/targets -name "*img*" | xargs -i mv -f {} $FIRMWARE_DIR
           echo "hahaha" | tee firmware/haha.log
           echo "::set-output name=status::success"
 
-      # - name: Upload artifact
-      #   uses: actions/upload-artifact@main
-      #   if: steps.compile.outputs.status == 'success'
-      #   with:
-      #     name: Openwrt_${{ env.FIRMWARE_TAG }}
-      #     path: ${{ env.FIRMWARE_DIR }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@main
+        if: steps.compile.outputs.status == 'success'
+        with:
+          name: Openwrt_${{ env.FIRMWARE_TAG }}
+          path: ${{ env.FIRMWARE_DIR }}
 
       - name: Upload firmware to CowTransfer
         id: cowtransfer
