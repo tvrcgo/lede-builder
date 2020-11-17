@@ -79,3 +79,31 @@ jobs:
           files: |
             ${{ env.FIRMWARE_DIR }}/*
 
+      - name: Send mail notification
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: smtp.exmail.qq.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[${{ job.status }}] build-firmware/${{ matrix.target }}"
+          body: |
+            <h1>build-firmware/${{ matrix.target }}</h1>
+            <dl>
+              <dt>编译结果</dt>
+              <dd>${{ steps.compile.outputs.status }}</dd>
+              <dt>固件下载</dt>
+              <dd><a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></dd>
+              <dt>GitHub</dt>
+              <dd>Ref：${{ github.ref }}</dd>
+              <dd>Runner：<a href='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}' target='_blank'>${{ github.run_id }}</a></dd>
+              <dd>Job：job_id=${{ github.job }}, status=${{ job.status }}</dd>
+            </dl>
+            <style>
+              dt { margin: 0.5em 0; font-size: 1.1em; font-weight: bold; }
+              dd { margin: 0.3em 0 0.3em 2em; }
+            </style>
+          to: tvrcgo@163.com
+          from: GitHub Action
+          content_type: text/html
+
