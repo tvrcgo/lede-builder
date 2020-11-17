@@ -99,8 +99,8 @@ jobs:
               <dd><p><a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></p></dd>
               <dt>GitHub</dt>
               <dd><p>Ref：${{ github.ref }}</p></dd>
-              <dd><p>Job：${{ job.status }}</p></dd>
-              <dd><p>Runner：<a href='https://github.com/tvrcgo/openwrt-builder/actions/runs/${{ github.run_id }}'>${{ github.run_id }}</a></p></dd>
+              <dd><p>Job：${{ job.status }}, ${{ job.container.id }}</p></dd>
+              <dd><p>Runner：<a href='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}' target='_blank'>${{ github.run_id }}</a></p></dd>
             </dl>
           to: tvrcgo@163.com
           from: GitHub
