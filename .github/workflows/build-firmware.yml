@@ -54,11 +54,14 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: Github Actions build-firmware result
-          body: file://README.md
+          body: |
+            <h1>Github Actions Notification</h1>
+            <div>编译结果：${{ steps.compile.outputs.status }}</div>
+            <div>下载地址：http://www.baidu.com</div>
           to: tvrcgo@163.com
-          from: Wei Lai
+          from: WeiLai
           content_type: text/html
-          attachments: entrypoint.sh
+          attachments: '*.sh'
 
       # - name: Upload artifact
       #   uses: actions/upload-artifact@main
