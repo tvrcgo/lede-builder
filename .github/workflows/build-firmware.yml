@@ -92,10 +92,10 @@ jobs:
           subject: "[Github Actions] build-firmware/${{ matrix.target }} result"
           body: |
             <h1>build-firmware/${{ matrix.target }}</h1>
-            <p>分支/标签：${GITHUB_REF##*/}</p>
+            <p>分支/标签：${{ github.ref }}</p>
             <p>编译结果：${{ steps.compile.outputs.status }}</p>
             <p>固件下载地址：<a href='${{ steps.cowtransfer.outputs.url }}'>奶牛快传</a></p>
-            <p>GitHub 工作流：${{ github.job }}, ${{ github.run_id }}</p>
+            <p>GitHub Workflow：${{ github.run_number }}, ${{ github.run_id }}</p>
           to: tvrcgo@163.com
           from: GitHub
           content_type: text/html
