@@ -1,0 +1,18 @@
+
+name: 'CowTransfer'
+description: 'upload files to cowtransfer'
+
+inputs:
+  files:
+    description: 'files path'
+    required: true
+  options:
+    description: 'transfer options'
+    required: false
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    FILES: ${{ inputs.files }}
+    OPTIONS: ${{ inputs.options }}
