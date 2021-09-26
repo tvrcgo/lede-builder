@@ -67,8 +67,8 @@ jobs:
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-shenzhen
           bucket: tvrcgo
-          asset-path: ${{ env.FIRMWARE_DIR }}
-          target-path: transfer/openwrt-firmware/${{ env.FIRMWARE_TAG }}
+          assets: |
+            ${{ env.FIRMWARE_DIR }}/**:transfer/openwrt-firmware/${{ env.FIRMWARE_TAG }}/
 
       - name: Create release
         uses: softprops/action-gh-release@v1
